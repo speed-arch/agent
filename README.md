@@ -11,8 +11,25 @@
 - 危险命令确认，普通命令可一键放行
 - 大输出自动落盘
 
+## 自动配置环境变量
+
+```sh
+cat > $PREFIX/bin/ai << 'SCRIPT'
+#!/data/data/com.termux/files/usr/bin/bash
+export PYTHONUTF8=1
+cd "$HOME/agent" || exit 1
+termux-wake-lock 2>/dev/null
+python3 main.py "$@"
+s=$?
+termux-wake-unlock 2>/dev/null
+exit $s
+SCRIPT
+chmod +x $PREFIX/bin/ai
+```
+
 ## 依赖
 
 ```sh
 pkg install python
 pip install requests
+
